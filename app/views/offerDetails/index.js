@@ -24,6 +24,8 @@ import { RegularButton } from '../../components /button';
 import { LogoCard } from '../../components /logoCard';
 import fonts from '../../modules/fonts';
 import styles from './styling';
+import { adsImage } from '../../assets/image/staticImages';
+import { adsImagesArr } from '../../global/helper';
 
 class OfferDetails extends Component {
   constructor(props) {
@@ -190,7 +192,10 @@ class OfferDetails extends Component {
     const categories = this.props.categories
     for(let i=0;i<categories.length;i+=1){
       if(categories[i].id == ID){
-        return categories[i].image
+        if(categories[i].image)
+         return categories[i].image
+         else
+         return adsImage
       }
     }
     return 'https://placeimg.com/640/480/tech'
@@ -340,7 +345,7 @@ class OfferDetails extends Component {
             firstItem={0}
             activeSlideAlignment={'center'}
             inactiveSlideOpacity={0.7}
-            data={type == 'Offer'? itemDatails.offer_images : itemDatails.discount_images}
+            data={type == 'Offer'? (itemDatails.offer_images.length?itemDatails.offer_images:adsImagesArr) : (itemDatails.discount_images.length?itemDatails.discount_images:adsImagesArr)}
             itemWidth={wp('90%')}
             sliderWidth={wp('100%')}
             inactiveSlideScale={0.95}

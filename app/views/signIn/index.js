@@ -34,12 +34,12 @@ export class SignIn extends Component {
           </View>
           <View
             style={{ marginTop: hp('32%'), width: wp('90%'), height: hp('40%'), alignItems: 'center' }}>
-            <RegularButton
+            {/* <RegularButton
               onClick={() => { this.props.navigation.navigate('MainScreen'); }}
               buttonStyle={{ width: wp('90%'), height: hp('8%'), borderRadius: 3, alignItems: 'center', justifyContent: 'center', backgroundColor: 'transparent', borderWidth: 1, borderColor: colors.darkgray }}
               buttonText={'دخول كضيف'}
               textStyle={{ color: colors.darkgray }}
-              />
+              /> */}
             <RegularButton
               onClick={() => { this.props.navigation.navigate('ExplorerRegister'); }}
               buttonStyle={{ marginTop: hp('2%'), width: wp('90%'), height: hp('8%'), borderRadius: 3, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.lightOrange }}

@@ -20,11 +20,12 @@ import { RegularButton } from '../../components /button';
 import styles from './styling';
 import fonts from '../../modules/fonts';
 import { UserReducer, UIReducer, OrderReducer } from '../../services/reducers';
+import { adsImage } from '../../assets/image/staticImages';
 
 const { UserLogin } = UserReducer;
 const { turnOnPageLoading, turnOffPageLoading } = UIReducer;
 const { GetOfferDetail, GetOffersWithFilter, ChangeSelectedItmeDatailsType,
-  GetDiscountsWithFilter,GetDiscountDetail } = OrderReducer;
+  GetDiscountsWithFilter, GetDiscountDetail } = OrderReducer;
 
 class Phones extends Component {
   constructor(props) {
@@ -137,17 +138,17 @@ class Phones extends Component {
   renderDiscountItem = ({ item, index }) => {
     return (
       <TouchableOpacity
-      onPress={()=>{this.loadDiscountDetails(item.id)}}
+        onPress={() => { this.loadDiscountDetails(item.id) }}
         style={[styles.dicountcardContainer, {
-          alignItems: (index + 1) % 2 ? 'flex-start' : 'flex-end', }]}>
+          alignItems: (index + 1) % 2 ? 'flex-start' : 'flex-end',
+        }]}>
 
         <DiscountCard
           containerStyle={styles.dicountItemContainer}
 
           imageContainerStyle={styles.dicountItemImageContainer}
           imageStyle={styles.dicountItemImageStyle}
-          imageSource={{ uri: item.discount_images[0].image }}
-
+          imageSource={item.discount_images[0] ? { uri: item.discount_images[0].image } : { uri: adsImage }}
 
           bodyStyle={styles.dicountItemTextContainer}
 
@@ -163,8 +164,8 @@ class Phones extends Component {
           priceText={item.price}
 
 
-          percentage={item.precentage+'%'}
-         />
+          percentage={item.precentage + '%'}
+        />
       </TouchableOpacity>
     );
   }
@@ -172,16 +173,16 @@ class Phones extends Component {
 
   renderOfferItem = ({ item, index }) => {
     return (
-      <TouchableOpacity 
-      onPress={()=>{this.loadOfferDetails(item.id)}}
-      style={[styles.offerItemContainer, {
-        alignItems: (index + 1) % 2 ? 'flex-start' : 'flex-end',
-        // backgroundColor: (index + 1) === this.state.offerData.length ? 'red' : 'blue'
-      }]}>
+      <TouchableOpacity
+        onPress={() => { this.loadOfferDetails(item.id) }}
+        style={[styles.offerItemContainer, {
+          alignItems: (index + 1) % 2 ? 'flex-start' : 'flex-end',
+          // backgroundColor: (index + 1) === this.state.offerData.length ? 'red' : 'blue'
+        }]}>
 
         <OfferCard
           imageStyle={styles.offerItemImageStyle}
-          imageSource={{ uri: item.offer_images[0].image }}
+          imageSource={item.offer_images[0] ? { uri: item.offer_images[0].image } : { uri: adsImage }}
           bodyStyle={styles.offerItemTextContainer}
           discriptionContainerStyle={styles.offerItemDecriptionTextContainer}
           discriptionTextStyle={[styles.mediumText, styles.shadowText, { lineHeight: fonts.size.input }]}
@@ -190,7 +191,7 @@ class Phones extends Component {
           currencyText={item.currency}
           priceTextStyle={[styles.regularText, { color: colors.white, }]}
           priceText={item.price}
-            />
+        />
       </TouchableOpacity>
     );
   }
@@ -212,7 +213,7 @@ class Phones extends Component {
         alert('هناك شي ما خاطئ');
       }
     };
-    this.props.GetOffersWithFilter(`?cat_id=${CatID}`,responseHandler)
+    this.props.GetOffersWithFilter(`?cat_id=${CatID}`, responseHandler)
   }
   loadOfferDetails = (ID) => {
     this.props.turnOnPageLoading();
@@ -227,10 +228,10 @@ class Phones extends Component {
         alert('هناك شي ما خاطئ');
       }
     };
-    this.props.GetOfferDetail(ID,responseHandler)
+    this.props.GetOfferDetail(ID, responseHandler)
   }
 
-  
+
   loadDiscount = (CatID) => {
     this.props.turnOnPageLoading();
     const responseHandler = {
@@ -242,7 +243,7 @@ class Phones extends Component {
         alert('هناك شي ما خاطئ');
       }
     };
-    this.props.GetDiscountsWithFilter(`?cat_id=${CatID}`,responseHandler)
+    this.props.GetDiscountsWithFilter(`?cat_id=${CatID}`, responseHandler)
   }
   loadDiscountDetails = (ID) => {
     this.props.turnOnPageLoading();
@@ -257,19 +258,19 @@ class Phones extends Component {
         alert('هناك شي ما خاطئ');
       }
     };
-    this.props.GetDiscountDetail(ID,responseHandler)
+    this.props.GetDiscountDetail(ID, responseHandler)
   }
 
-  loadData = (index) =>{
-    if(index == 0){
+  loadData = (index) => {
+    if (index == 0) {
       this.loadDiscount(this.props.SelectedCatItem.id)
     }
-    else{
+    else {
       this.loadOffers(this.props.SelectedCatItem.id)
     }
   }
 
-  loadAllData = (CatID) =>{
+  loadAllData = (CatID) => {
     const DiscountresponseHandler = {
       onSuccess: () => {
         this.props.turnOffPageLoading();
@@ -281,7 +282,7 @@ class Phones extends Component {
     };
     const responseHandler = {
       onSuccess: () => {
-        this.props.GetDiscountsWithFilter(`?cat_id=${CatID}`,DiscountresponseHandler)
+        this.props.GetDiscountsWithFilter(`?cat_id=${CatID}`, DiscountresponseHandler)
       },
       onFail: (error) => {
         this.props.turnOffPageLoading();
@@ -289,10 +290,10 @@ class Phones extends Component {
       }
     };
     this.props.turnOnPageLoading();
-    this.props.GetOffersWithFilter(`?cat_id=${CatID}`,responseHandler)
+    this.props.GetOffersWithFilter(`?cat_id=${CatID}`, responseHandler)
   }
 
-  
+
   // componentDidMount(){
   //   this.loadOffers(this.props.SelectedCatItem.id)
   //   this.loadDiscount(this.props.SelectedCatItem.id)
@@ -303,14 +304,14 @@ class Phones extends Component {
     return (
       <View
         style={{ width: wp('100%'), height: hp('100%'), alignItems: 'center' }}>
-           <NavigationEvents
-              onWillFocus={() => {
-                console.log('onWillFocus','this.state.selectedOption',this.state.selectedOption)
-                // this.swipe(1);
-                // this.setState({selectedOption: 1})
-                // this.loadOffers(this.props.SelectedCatItem.id)
-                // this.loadDiscount(this.props.SelectedCatItem.id)
-                this.loadAllData(this.props.SelectedCatItem.id)
+        <NavigationEvents
+          onWillFocus={() => {
+            console.log('onWillFocus', 'this.state.selectedOption', this.state.selectedOption)
+            // this.swipe(1);
+            // this.setState({selectedOption: 1})
+            // this.loadOffers(this.props.SelectedCatItem.id)
+            // this.loadDiscount(this.props.SelectedCatItem.id)
+            this.loadAllData(this.props.SelectedCatItem.id)
           }}
         />
         <View
@@ -321,7 +322,7 @@ class Phones extends Component {
             headerName={`قسم ${this.props.SelectedCatItem.name}`}
             leftImage={GetPhoto('menuButton')}
             leftImageClick={() => { this.props.navigation.openDrawer(); }}
-        />
+          />
         </View>
 
         <View style={styles.headerContainer}>
@@ -338,7 +339,7 @@ class Phones extends Component {
                   <TextWithUnderLine
                     containerwidth={wp('45%')}
                     onPress={() => {
-                console.log('Phones','Header FlatList','index = ',index, ' this.state.selectedOption = ',this.state.selectedOption )
+                      console.log('Phones', 'Header FlatList', 'index = ', index, ' this.state.selectedOption = ', this.state.selectedOption)
                       // this.loadData(index);
                       this.swipe(index);
                       this.setState({ selectedOption: index });
@@ -347,10 +348,10 @@ class Phones extends Component {
                     selected={(this.state.selectedOption === index)}
                     selectedColor={colors.lightOrange}
                     notSelectedColor={colors.darkgray}
-                    />
+                  />
                 );
               }}
-           />
+            />
           </View>
         </View>
 
@@ -361,13 +362,14 @@ class Phones extends Component {
             height: hp('7%'),
             alignItems: 'center',
             flexDirection: 'row',
-            justifyContent: 'space-between', }}>
+            justifyContent: 'space-between',
+          }}>
 
           <View style={{ width: wp('55%'), alignItems: 'center', }}>
             <TextWithImage
               text={'احصل على اشعارات جديد القسم'}
               ImageSource={GetPhoto('mailbox')}
-        />
+            />
           </View>
           <View style={{ width: wp('25%'), alignItems: 'center', }}>
             <RegularButton
@@ -379,7 +381,7 @@ class Phones extends Component {
               buttonStyle={{ width: wp('25%'), height: hp('7%'), borderRadius: 5, alignItems: 'center', justifyContent: 'center', backgroundColor: turnOnNotification ? colors.darkerOrange : 'transparent', borderWidth: 1, borderColor: colors.darkerOrange }}
               buttonText={'تفعيل'}
               textStyle={{ color: turnOnNotification ? colors.white : colors.darkerOrange }}
-              />
+            />
           </View>
         </View>
 
@@ -419,7 +421,7 @@ class Phones extends Component {
                 keyExtractor={(item, index) => index.toString()}
                 contentContainerStyle={{ alignItems: 'center', }}
                 renderItem={this.renderOfferItem}
-           />
+              />
             </View>
           </View>
 
@@ -433,7 +435,7 @@ class Phones extends Component {
                 keyExtractor={(item, index) => index.toString()}
                 contentContainerStyle={{ alignItems: 'center', }}
                 renderItem={this.renderDiscountItem}
-           />
+              />
             </View>
           </View>
 

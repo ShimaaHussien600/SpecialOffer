@@ -27,6 +27,7 @@ import fonts from '../../modules/fonts';
 import { ImageWithContent } from '../../components /image/image';
 import styles from './styling';
 import { UserReducer, UIReducer, OrderReducer } from '../../services/reducers';
+import { adsImage } from '../../assets/image/staticImages';
 
 const { UserLogin } = UserReducer;
 const { turnOnPageLoading, turnOffPageLoading } = UIReducer;
@@ -187,7 +188,7 @@ class Home extends Component {
         alert('هناك شي ما خاطئ');
       }
     };
-    this.props.GetOfferDetail(ID,responseHandler)
+    this.props.GetOfferDetail(ID, responseHandler)
   }
 
   loadDiscountDetails = (ID) => {
@@ -203,14 +204,15 @@ class Home extends Component {
         alert('هناك شي ما خاطئ');
       }
     };
-    this.props.GetDiscountDetail(ID,responseHandler)
+    this.props.GetDiscountDetail(ID, responseHandler)
   }
 
   renderHeaderItem = ({ item, index }) => {
     return (
       <ImageWithContent
         imageStyle={styles.headerItemContainer}
-        imageSource={{ uri: item.image }}>
+        imageSource={{ uri: item.image }}
+      >
         <View
           style={styles.headerItemTextContainer}>
           <Text style={[styles.mediumText, { marginTop: hp('18%') }]}>
@@ -220,17 +222,18 @@ class Home extends Component {
       </ImageWithContent>
     );
   }
-  
+
   renderOfferItem = ({ item, index }) => {
     return (
       <TouchableOpacity
         onPress={() => { this.loadOfferDetails(item.id) }}
         style={[styles.offerItemContainer, {
-          marginRight: (index + 1) !== this.state.offerData.length ? wp('4%') : 0, }]}>
+          marginRight: (index + 1) !== this.state.offerData.length ? wp('4%') : 0,
+        }]}>
 
         <OfferCard
           imageStyle={styles.offerItemImageStyle}
-          imageSource={{ uri: item.offer_images[0].image }}
+          imageSource={item.offer_images[0] ? { uri: item.offer_images[0].image } : { uri: adsImage }}
           bodyStyle={styles.offerItemTextContainer}
           discriptionContainerStyle={styles.offerItemDecriptionTextContainer}
           discriptionTextStyle={[styles.mediumText, styles.shadowText, { lineHeight: fonts.size.input }]}
@@ -239,7 +242,7 @@ class Home extends Component {
           currencyText={'درهم'}
           priceTextStyle={[styles.regularText, { color: colors.white, }]}
           priceText={item.price}
-            />
+        />
       </TouchableOpacity>
     );
   }
@@ -249,15 +252,15 @@ class Home extends Component {
       <TouchableOpacity
         onPress={() => { this.loadDiscountDetails(item.id) }}
         style={[styles.dicountItemContainer, {
-          marginRight: (index + 1) !== this.state.cards.length ? wp('4%') : 0, }]}>
+          marginRight: (index + 1) !== this.state.cards.length ? wp('4%') : 0,
+        }]}>
 
         <DiscountCard
           containerStyle={styles.dicountItemContainer}
 
           imageContainerStyle={styles.dicountItemImageContainer}
           imageStyle={styles.dicountItemImageStyle}
-          imageSource={{ uri: item.discount_images[0].image }}
-
+          imageSource={item.discount_images[0] ? { uri: item.discount_images[0].image } : { uri: adsImage }}
 
           bodyStyle={styles.dicountItemTextContainer}
 
@@ -273,28 +276,29 @@ class Home extends Component {
           priceText={item.price}
 
 
-          percentage={item.precentage+'%'}
-         />
+          percentage={item.precentage + '%'}
+        />
       </TouchableOpacity>
     );
   }
-  
+
   renderCategoryItem = ({ item, index }) => {
     return (
       <TouchableOpacity
         onPress={() => {
-          this.props.ChangeSelectedCatItem(item); 
-          this.props.navigation.navigate('Phones'); 
+          this.props.ChangeSelectedCatItem(item);
+          this.props.navigation.navigate('Phones');
         }}
         style={[styles.categoryItemContainer, {
-          marginRight: (index + 1) !== this.state.icons.length ? wp('4%') : 0, }]}>
+          marginRight: (index + 1) !== this.state.icons.length ? wp('4%') : 0,
+        }]}>
         <CategoryCard
           imageStyle={styles.categoryItemImageStyle}
           imageSource={{ uri: item.image }}
           bodyStyle={styles.categorycontent}
           nameTextStyle={[styles.regularText, styles.shadowText, { color: colors.white, lineHeight: fonts.size.h5 }]}
           nameText={item.name}
-            />
+        />
       </TouchableOpacity>
     );
   }
@@ -313,7 +317,7 @@ class Home extends Component {
           priceText={item.price}
           deadlineText={`${item.days_remaining} يوم على انتهاء العرض`}
           locationText={'راس خيمة'}
-            />
+        />
       </TouchableOpacity>
     );
   }
@@ -324,15 +328,15 @@ class Home extends Component {
         onPress={() => { this.loadDiscountDetails(item.id) }}
         style={styles.NewArrivalItemContainer}>
         <NewArrivalCard
-          imageSource={{ uri: item.discount_images[0].image }}
-          percentage={item.precentage+'%'}
+          imageSource={item.discount_images[0] ? { uri: item.discount_images[0].image } : { uri: adsImage }}
+          percentage={item.precentage + '%'}
           titleText={item.name}
           price={false}
           // currencyText={'درهم'}
           // priceText={'174'}
           deadlineText={`${item.days_remaining} يوم على انتهاء العرض`}
           locationText={'راس خيمة'}
-            />
+        />
       </TouchableOpacity>
     );
   }
@@ -357,7 +361,7 @@ class Home extends Component {
             headerName={'الرئيسية'}
             leftImage={GetPhoto('menuButton')}
             leftImageClick={() => { this.props.navigation.openDrawer(); }}
-        />
+          />
         </View>
 
         <ScrollView
@@ -388,7 +392,7 @@ class Home extends Component {
               ref={(c) => { this._carousel = c; }}
               inactiveSlideScale={1}
               renderItem={this.renderHeaderItem}
-          />
+            />
           </View>}
 
           {/* ----------------- best offer  ------------------- */}
@@ -411,7 +415,7 @@ class Home extends Component {
                   extraData={this.props}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={this.renderOfferItem}
-           />
+                />
               </View>
             </View>
           </View>}
@@ -436,7 +440,7 @@ class Home extends Component {
                   extraData={this.props}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={this.renderDiscountItem}
-           />
+                />
               </View>
             </View>
           </View>}
@@ -457,21 +461,21 @@ class Home extends Component {
                   extraData={this.state}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={this.renderCategoryItem}
-           />
+                />
               </View>
             </View>
           </View>}
 
           {/* -------------------- Ad ---------------------- */}
           <View style={[styles.sectionConainer, { marginTop: hp('2%') }]}>
-          <Carousel
+            <Carousel
               data={this.props.bottomADS}
               sliderWidth={wp('100%')}
               itemWidth={wp('100%')}
               ref={(c2) => { this._carousel12 = c2; }}
               inactiveSlideScale={1}
               renderItem={this.renderHeaderItem}
-          />
+            />
             {/* <ImageWithContent
               imageStyle={{ width: wp('100%'), height: hp('25%'), }}
               imageSource={{ uri: 'https://i.ytimg.com/vi/QDaH-B6NY-4/maxresdefault.jpg' }} /> */}
@@ -494,7 +498,7 @@ class Home extends Component {
                   extraData={this.props}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={this.renderNewArrivalOfferItem}
-           />
+                />
               </View>
             </View>
           </View>}
@@ -515,7 +519,7 @@ class Home extends Component {
                   extraData={this.props}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={this.renderNewArrivalDiscountItem}
-           />
+                />
               </View>
             </View>
           </View>}
@@ -536,7 +540,7 @@ class Home extends Component {
                   extraData={this.props}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={this.renderOfferItem}
-           />
+                />
               </View>
             </View>
           </View>}
@@ -557,7 +561,7 @@ class Home extends Component {
                   extraData={this.props}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={this.renderDiscountItem}
-           />
+                />
               </View>
             </View>
           </View>}
@@ -571,17 +575,17 @@ class Home extends Component {
 function mapStateToProps(state) {
   return {
     categories: state.OrderReducer.categories,
-    
-    bestOffers:     state.OrderReducer.bestOffers,
-    newOffers:      state.OrderReducer.newOffers,
-    endSoonOffers:  state.OrderReducer.endSoonOffers,
 
-    bestDiscount:   state.OrderReducer.bestDiscount,
-    newDiscount:    state.OrderReducer.newDiscount,
-    endSoonDiscount:state.OrderReducer.endSoonDiscount,
-    
-    topADS:         state.OrderReducer.topADS,
-    bottomADS:      state.OrderReducer.bottomADS,
+    bestOffers: state.OrderReducer.bestOffers,
+    newOffers: state.OrderReducer.newOffers,
+    endSoonOffers: state.OrderReducer.endSoonOffers,
+
+    bestDiscount: state.OrderReducer.bestDiscount,
+    newDiscount: state.OrderReducer.newDiscount,
+    endSoonDiscount: state.OrderReducer.endSoonDiscount,
+
+    topADS: state.OrderReducer.topADS,
+    bottomADS: state.OrderReducer.bottomADS,
   };
 }
 

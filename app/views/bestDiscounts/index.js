@@ -17,6 +17,7 @@ import { Card, OfferCard, DiscountCard } from '../../components /card';
 import styles from './styling';
 import fonts from '../../modules/fonts';
 import { UserReducer, UIReducer, OrderReducer } from '../../services/reducers';
+import { adsImage } from '../../assets/image/staticImages';
 
 const { UserLogin } = UserReducer;
 const { turnOnPageLoading, turnOffPageLoading } = UIReducer;
@@ -53,16 +54,17 @@ class BestDiscounts extends Component {
   renderDiscountItem = ({ item, index }) => {
     return (
       <TouchableOpacity
-      onPress={()=>{this.loadDiscountDetails(item.id)}}
+        onPress={() => { this.loadDiscountDetails(item.id) }}
         style={[styles.dicountcardContainer, {
-          alignItems: (index + 1) % 2 ? 'flex-start' : 'flex-end', }]}>
+          alignItems: (index + 1) % 2 ? 'flex-start' : 'flex-end',
+        }]}>
 
         <DiscountCard
           containerStyle={styles.dicountItemContainer}
 
           imageContainerStyle={styles.dicountItemImageContainer}
           imageStyle={styles.dicountItemImageStyle}
-          imageSource={{ uri: item.discount_images[0].image }}
+          imageSource={item.discount_images[0] ? { uri: item.discount_images[0].image } : { uri: adsImage }}
 
 
           bodyStyle={styles.dicountItemTextContainer}
@@ -79,8 +81,8 @@ class BestDiscounts extends Component {
           priceText={item.price}
 
 
-          percentage={item.precentage+'%'}
-         />
+          percentage={item.precentage + '%'}
+        />
       </TouchableOpacity>
     );
   }
@@ -98,7 +100,7 @@ class BestDiscounts extends Component {
         alert('هناك شي ما خاطئ');
       }
     };
-    this.props.GetDiscountDetail(ID,responseHandler)
+    this.props.GetDiscountDetail(ID, responseHandler)
   }
 
   filterDiscount = (CatID) => {
@@ -112,17 +114,17 @@ class BestDiscounts extends Component {
         alert('هناك شي ما خاطئ');
       }
     };
-    if(CatID == -1){
-      this.props.GetDiscountsWithFilter('best',responseHandler )
+    if (CatID == -1) {
+      this.props.GetDiscountsWithFilter('best', responseHandler)
     }
-    else{
-      this.props.GetDiscountsWithFilter(`?cat_id=${CatID}&order_by=most_visited`,responseHandler)
+    else {
+      this.props.GetDiscountsWithFilter(`?cat_id=${CatID}&order_by=most_visited`, responseHandler)
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     let { categories } = this.props;
-    let mixed={name: 'متنوع', id: -1}
+    let mixed = { name: 'متنوع', id: -1 }
     categories.splice(0, 0, mixed);
     this.setState({ categories })
   }
@@ -139,7 +141,7 @@ class BestDiscounts extends Component {
             headerName={'افضل الخصومات'}
             leftImage={GetPhoto('menuButton')}
             leftImageClick={() => { this.props.navigation.openDrawer(); }}
-        />
+          />
         </View>
         {/* <View style={{ width: wp('100%'), height: 2, marginTop: hp('4%'), backgroundColor: colors.grayInput }} /> */}
 
@@ -156,16 +158,16 @@ class BestDiscounts extends Component {
                   <TextWithUnderLine
                     onPress={() => {
                       this.filterDiscount(item.id)
-                      this.setState({ selectedOption: index }); 
+                      this.setState({ selectedOption: index });
                     }}
                     text={item.name}
                     selected={(this.state.selectedOption === index)}
                     selectedColor={colors.lightOrange}
                     notSelectedColor={colors.darkgray}
-                    />
+                  />
                 );
               }}
-           />
+            />
           </View>
         </View>
 
@@ -176,12 +178,12 @@ class BestDiscounts extends Component {
             <FlatList
               numColumns={2}
               showsVerticalScrollIndicator={false}
-              data={this.state.selectedOption == 0 ? this.props.bestDiscount: this.props.catBestDiscount}
+              data={this.state.selectedOption == 0 ? this.props.bestDiscount : this.props.catBestDiscount}
               extraData={this.state}
               keyExtractor={(item, index) => index.toString()}
               contentContainerStyle={{ alignItems: 'center', }}
               renderItem={this.renderDiscountItem}
-           />
+            />
           </View>
         </View>
 

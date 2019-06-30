@@ -17,6 +17,7 @@ import { Card, OfferCard } from '../../components /card';
 import styles from './styling';
 import fonts from '../../modules/fonts';
 import { UserReducer, UIReducer, OrderReducer } from '../../services/reducers';
+import { adsImage } from '../../assets/image/staticImages';
 
 const { UserLogin } = UserReducer;
 const { turnOnPageLoading, turnOffPageLoading } = UIReducer;
@@ -27,7 +28,7 @@ class BestOffers extends Component {
     super(props);
     this.state = {
       selectedOption: 0,
-      categories:[],
+      categories: [],
       offerData: [
         {
           offerDiscription: 'ايفون 6 بلس 128 جيجا مساحة تخزين',
@@ -104,17 +105,18 @@ class BestOffers extends Component {
   }
 
   renderOfferItem = ({ item, index }) => {
+    console.log("imageData =",item.offer_images[0])
     return (
-      <TouchableOpacity 
-      onPress={()=>{this.loadOfferDetails(item.id)}}
-      style={[styles.offerItemContainer, {
-        alignItems: (index + 1) % 2 ? 'flex-start' : 'flex-end',
-        // backgroundColor: (index + 1) === this.state.offerData.length ? 'red' : 'blue'
-      }]}>
+      <TouchableOpacity
+        onPress={() => { this.loadOfferDetails(item.id) }}
+        style={[styles.offerItemContainer, {
+          alignItems: (index + 1) % 2 ? 'flex-start' : 'flex-end',
+          // backgroundColor: (index + 1) === this.state.offerData.length ? 'red' : 'blue'
+        }]}>
 
         <OfferCard
           imageStyle={styles.offerItemImageStyle}
-          imageSource={{ uri: item.offer_images[0].image }}
+          imageSource={item.offer_images[0] ? { uri: item.offer_images[0].image } : { uri: adsImage }}
           bodyStyle={styles.offerItemTextContainer}
           discriptionContainerStyle={styles.offerItemDecriptionTextContainer}
           discriptionTextStyle={[styles.mediumText, styles.shadowText, { lineHeight: fonts.size.input }]}
@@ -123,7 +125,7 @@ class BestOffers extends Component {
           currencyText={'درهم'}
           priceTextStyle={[styles.regularText, { color: colors.white, }]}
           priceText={item.price}
-            />
+        />
       </TouchableOpacity>
     );
   }
@@ -141,7 +143,7 @@ class BestOffers extends Component {
         alert('هناك شي ما خاطئ');
       }
     };
-    this.props.GetOfferDetail(ID,responseHandler)
+    this.props.GetOfferDetail(ID, responseHandler)
   }
 
   filterOffer = (CatID) => {
@@ -155,17 +157,17 @@ class BestOffers extends Component {
         alert('هناك شي ما خاطئ');
       }
     };
-    if(CatID == -1){
-      this.props.GetOffersWithFilter('best',responseHandler )
+    if (CatID == -1) {
+      this.props.GetOffersWithFilter('best', responseHandler)
     }
-    else{
-      this.props.GetOffersWithFilter(`?cat_id=${CatID}&order_by=most_visited`,responseHandler)
+    else {
+      this.props.GetOffersWithFilter(`?cat_id=${CatID}&order_by=most_visited`, responseHandler)
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     let { categories } = this.props;
-    let mixed={name: 'متنوع', id: -1}
+    let mixed = { name: 'متنوع', id: -1 }
     categories.splice(0, 0, mixed);
     this.setState({ categories })
   }
@@ -182,7 +184,7 @@ class BestOffers extends Component {
             headerName={'افضل العروض'}
             leftImage={GetPhoto('menuButton')}
             leftImageClick={() => { this.props.navigation.openDrawer(); }}
-        />
+          />
         </View>
         {/* <View style={{ width: wp('100%'), height: 2, marginTop: hp('4%'), backgroundColor: colors.grayInput }} /> */}
 
@@ -199,16 +201,16 @@ class BestOffers extends Component {
                   <TextWithUnderLine
                     onPress={() => {
                       this.filterOffer(item.id)
-                      this.setState({ selectedOption: index }); 
+                      this.setState({ selectedOption: index });
                     }}
                     text={item.name}
                     selected={(this.state.selectedOption === index)}
                     selectedColor={colors.lightOrange}
                     notSelectedColor={colors.darkgray}
-                    />
+                  />
                 );
               }}
-           />
+            />
           </View>
         </View>
 
@@ -219,12 +221,12 @@ class BestOffers extends Component {
             <FlatList
               numColumns={2}
               showsVerticalScrollIndicator={false}
-              data={this.state.selectedOption == 0 ? this.props.bestOffers: this.props.catBestOfferes}
+              data={this.state.selectedOption == 0 ? this.props.bestOffers : this.props.catBestOfferes}
               extraData={this.props}
               keyExtractor={(item, index) => index.toString()}
-              contentContainerStyle={{ alignItems: 'center',  }}
+              contentContainerStyle={{ alignItems: 'center', }}
               renderItem={this.renderOfferItem}
-           />
+            />
           </View>
         </View>
 

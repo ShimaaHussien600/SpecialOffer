@@ -15,14 +15,10 @@ import { RegularTextInput } from '../../components /textinput';
 import { ClickableText } from '../../components /text';
 import fonts from '../../modules/fonts';
 import { UserReducer, UIReducer } from '../../services/reducers';
+import { validateEmail, DisplayError } from '../../global/helper';
 
 const { UserLogin } = UserReducer;
 const { turnOnPageLoading, turnOffPageLoading } = UIReducer;
-
-function validateEmail(email) {
-  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase());
-}
 
 class ExplorerSignIn extends Component {
   constructor(props) {
@@ -51,52 +47,59 @@ class ExplorerSignIn extends Component {
               selectionColor={colors.lightOrange}
               onChangeText={(email) => { this.setState({ email }); }}
               placeholder={'البريد الالكتروني'}
-              />
+            />
             <RegularTextInput
               secureTextEntry={true}
               selectionColor={colors.lightOrange}
               onChangeText={(password) => { this.setState({ password }); }}
               placeholder={'كلمة المرور'}
               textInputnStyle={{ marginTop: hp('2%') }}
-              />
+            />
           </View>
           <View style={{ marginTop: hp('20%') }}>
             <View
               style={{ width: wp('90%'), height: hp('8%'), alignItems: 'center' }}>
               <RegularButton
                 onClick={() => {
-                  if(validateEmail(this.state.email)){
-                    const data = {
-                      email: validateEmail(this.state.email),
-                      password: this.state.password,
-                    };
-                    const responseHandler = {
-                      onSuccess: () => {
-                        this.props.turnOffPageLoading();
-                        const resetAction = StackActions.reset({
-                          index: 0,
-                          key: null,
-                          actions: [
-                            NavigationActions.navigate({ routeName: 'MainScreen' }),
-                          ],
-                        });
-                        this.props.navigation.dispatch(resetAction);
-                        // this.props.navigation.navigate('AdvertiserStack');
-                      },
-                      onFail: (error) => {
-                        this.props.turnOffPageLoading();
-                        console.log('AdvertiserRegister', 'onFail', 'error', error);
-                        alert('ssssssssssssssssهناك شي ما خاطئ');
-                      }
-                    };
-                    this.props.turnOnPageLoading();
-                    this.props.UserLogin(data, responseHandler);
+                  if (this.state.email && this.state.password) {
+                    if (validateEmail(this.state.email)) {
+                      const data = {
+                        email: this.state.email,
+                        password: this.state.password,
+                      };
+                      const responseHandler = {
+                        onSuccess: () => {
+                          this.props.turnOffPageLoading();
+                          const resetAction = StackActions.reset({
+                            index: 0,
+                            key: null,
+                            actions: [
+                              NavigationActions.navigate({ routeName: 'MainScreen' }),
+                            ],
+                          });
+                          this.props.navigation.dispatch(resetAction);
+                          // this.props.navigation.navigate('AdvertiserStack');
+                        },
+                        onFail: (error) => {
+                          this.props.turnOffPageLoading();
+                          console.log('AdvertiserRegister', 'onFail', 'error', error);
+                          DisplayError(error);
+                          // alert('هناك شي ما خاطئ');
+                        }
+                      };
+                      this.props.turnOnPageLoading();
+                      this.props.UserLogin(data, responseHandler);
+                    }
+                    else {
+                      alert('عليك ان تدخل بريد إلكتروني صالح');
+                    }
                   }
-                  else{
-                    alert('عليك ان تدخل بريد إلكتروني صالح');
+                  else {
+                    alert('لا يمكن لأي حقل ان يكون فارغاً');
                   }
                 }
-              }
+
+                }
                 buttonStyle={{ marginTop: hp('2%'), width: wp('90%'), height: hp('8%'), borderRadius: 3, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.lightOrange }}
                 buttonText={'دخول'}
                 textStyle={{ color: colors.white }}
@@ -109,7 +112,7 @@ class ExplorerSignIn extends Component {
                 regularTextStyle={{ color: colors.black, fontSize: fonts.size.medium, fontFamily: fonts.type.normal }}
                 clickableText={'سجل من هنا'}
                 clickableTextStyle={{ color: colors.darkRed, fontSize: fonts.size.medium, fontFamily: fonts.type.normal }}
-                />
+              />
             </View>
           </View>
         </View>
